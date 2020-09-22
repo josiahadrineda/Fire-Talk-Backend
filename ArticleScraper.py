@@ -23,7 +23,7 @@ USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:65.0) Gecko/20100
 ## mobile user-agent
 MOBILE_USER_AGENT = "Mozilla/5.0 (Linux; Android 7.0; SM-G930V Build/NRD90M) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.125 Mobile Safari/537.36"
 
-#scrapes google search results
+# scrapes google search results
 
 
 def banana(city, n):
@@ -49,7 +49,7 @@ def banana(city, n):
                     }
                 x = "news.google.com" + item['link']    
                 results.append(x)
-                #time.sleep(random.randint(1,4))
+                # time.sleep(random.randint(1,4))
     new_results = []
 
     i=0
@@ -59,14 +59,3 @@ def banana(city, n):
         i+=1
 
     return new_results
-
-            
-
-
-
-
-
-
-
-print(banana("Thousand Oaks", 3))
-
