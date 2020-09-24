@@ -31,12 +31,18 @@ def home():
 
 
 @app.route('/api/articles', methods=['GET'])    # article scraper
-def article_scraper(city, n):  #n is the number of articles to display
+def article_scraper():  #n is the number of articles to display
     # potentially need to update scraper to use google filtered by time instead of news
+    
+    city = request.args.get('city')
+    n = request.args.get('n')
+
+    n = int(n)
+
+
 
     USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:65.0) Gecko/20100101 Firefox/65.0"
     MOBILE_USER_AGENT = "Mozilla/5.0 (Linux; Android 7.0; SM-G930V Build/NRD90M) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.125 Mobile Safari/537.36"
-
 
 
     query = str(city) + " fire" 
@@ -64,11 +70,14 @@ def article_scraper(city, n):  #n is the number of articles to display
     while i < n:
         new_results.append(results[i])
         i+=1
-    return new_results
+    return new_results[0]
 
 
 @app.route('/api/nearCities', methods=['GET'])
-def nearby_cities(city, k=5):
+def nearby_cities():
+
+    city = request.args.get('city')
+    k = request.args.get('k')
     """Given the name of a CITY and a positive integer K, returns
     the CITY and the nearest K cities as a list of tuples. The format
     of each tuple is (name, (distance in mi, distance in km)).
