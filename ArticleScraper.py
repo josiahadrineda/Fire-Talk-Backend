@@ -58,4 +58,4 @@ def banana(city, n):
         new_results.append(results[i])
         i+=1
 
-    return new_results
+    return new_results[0]
