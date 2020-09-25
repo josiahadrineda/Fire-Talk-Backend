@@ -122,7 +122,10 @@ def nearby_cities():
 
 
 @app.route('/api/distanceCalculator', methods=['GET'])
-def distance(lat, long):
+def distance():
+
+    lat = request.args.get("lat")
+    long = request.args.get("long")
     """Takes the reference latitude LAT and longitude LONG and
     returns a calculate_distance function used to sort cities.csv.
     """
@@ -143,7 +146,9 @@ def distance(lat, long):
     lat, long = radians(lat), radians(long)
 
     #Haversine Formula
-    def calculate_distance_haversine(geopoint):
+    def calculate_distance_haversine():
+
+        geopoint = request.args.get("geopoint")
         dists = []
         for gp in geopoint:
             lat2, long2 = [radians(float(p.replace('(', '').replace(')', ''))) for p in gp.split(',')]
