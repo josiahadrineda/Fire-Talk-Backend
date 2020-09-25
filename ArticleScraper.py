@@ -1,10 +1,5 @@
 from bs4 import BeautifulSoup
 import requests
-import urllib
-import csv
-from csv import writer
-import time
-import random
 
 
 proxies = {
