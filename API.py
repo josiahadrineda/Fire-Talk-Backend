@@ -50,4 +50,5 @@ def get_nearby_cities():
 
     return nearby_cities(city, k)
 
-app.run()
+if __name__ == "__main__":
+    app.run()
