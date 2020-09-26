@@ -46,7 +46,7 @@ def make_article_scraper():  #n is the number of articles to display
 @app.route('/api/nearCities', methods=['GET'])
 def get_nearby_cities():
     city = request.args.get('city')
-    k = request.args.get('k')
+    k = int(request.args.get('k'))
 
     return nearby_cities(city, k)
 
