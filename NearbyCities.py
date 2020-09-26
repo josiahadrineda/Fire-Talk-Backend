@@ -4,6 +4,7 @@ Also note that many minor cities might not be included within the csv."""
 
 # *There might be a query limit for Nominatim...so BEWARE!*
 from geopy.geocoders import Nominatim
+from collections import OrderedDict
 # *Requires pandas 1.1.0 or higher*
 import pandas as pd
 
@@ -47,11 +48,11 @@ def nearby_cities(city, k=5):
         nearby_cities_dists_list = list(zip(nearby_cities['city'], nearby_cities['distance']))
         if city in nearby_cities_list:
             c = nearby_cities_dists_list.pop(nearby_cities_list.index(city))
-            nearby_cities_dists_list.insert(0, (city, (0.0, 0.0)))
         else:
             nearby_cities_dists_list.pop()
-            nearby_cities_dists_list.insert(0, (city, (0.0, 0.0)))
-        return nearby_cities_dists_list
+        nearby_cities_dists_list.insert(0, (city, (0.0, 0.0)))
+        print(nearby_cities_dists_list)
+        return OrderedDict(nearby_cities_dists_list)
     except AttributeError:
         return 'An error occurred, you MONKEY! Try again.'
 
@@ -98,3 +99,5 @@ def distance(lat, long):
         return pd.Series(dists)
 
     return calculate_distance_haversine
+
+print(nearby_cities('Tracy'))
