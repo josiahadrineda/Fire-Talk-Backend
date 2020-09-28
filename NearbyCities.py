@@ -31,6 +31,7 @@ def nearby_cities(city, k=5):
     'You misspelled your city, you MONKEY! Try again.'
     """
     assert k > 0, 'K must be a positive integer.'
+    
     global cities
 
     try:
@@ -48,13 +49,23 @@ def nearby_cities(city, k=5):
         
         # CITY is most likely to be in nearby_cities
         nearby_cities = cities.head(k+1)
+
+        # *This function will now only apply INSIDE THE STATES*
+        nearby_cities_states = list(nearby_cities['admin_name'])
+        nearby_cities_countries = list(nearby_cities['iso3'])
+
         nearby_cities_list = list(nearby_cities['city'])
         nearby_cities_dists_list = list(zip(nearby_cities['city'], nearby_cities['distance']))
         if city in nearby_cities_list:
             c = nearby_cities_dists_list.pop(nearby_cities_list.index(city))
         else:
             nearby_cities_dists_list.pop()
-        nearby_cities_dists_list.insert(0, (city, (get_aqi(lat, long), (0.0, 0.0))))
+        nearby_cities_dists_list.insert(0, (city, (0.0, 0.0)))
+
+        for i in range(len(nearby_cities_dists_list)):
+            ci, st, co = nearby_cities_list[i], nearby_cities_states[i], nearby_cities_countries[i]
+            _, dist = nearby_cities_dists_list[i]
+            nearby_cities_dists_list[i] = (ci, (get_aqi(ci, st, co), dist))
         return OrderedDict(nearby_cities_dists_list)
     except AttributeError:
         return 'An error occurred, you MONKEY! Try again.'
@@ -72,7 +83,7 @@ def distance(lat, long):
     """def calculate_distance(geopoint):
         dists = []
         for gp in geopoint:
-            lat2, long2 = [float(p.replace('(', '').replace(')', '')) for p in gp.split(',')]
+            lat2, long2 = convert_str_to_gp(gp)
             y = lat2 - lat
             x = long2 - long
             dist = sqrt(x**2 + y**2)
@@ -86,7 +97,7 @@ def distance(lat, long):
     def calculate_distance_haversine(geopoint):
         dists = []
         for gp in geopoint:
-            lat2, long2 = [radians(float(p.replace('(', '').replace(')', ''))) for p in gp.split(',')]
+            lat2, long2 = convert_str_to_gp(gp)
             y = radians(lat2 - lat)
             x = radians(long2 - long)
 
@@ -102,3 +113,10 @@ def distance(lat, long):
         return pd.Series(dists)
 
     return calculate_distance_haversine
+
+def convert_str_to_gp(s):
+    """Converts the string representation of geopoint S into
+    two floats corresponding to latitude and longitude.
+    """
+
+    return [radians(float(p.replace('(', '').replace(')', ''))) for p in s.split(',')]
