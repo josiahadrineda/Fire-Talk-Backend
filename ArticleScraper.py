@@ -1,5 +1,11 @@
 from bs4 import BeautifulSoup
 import requests
+import urllib
+import csv
+from csv import writer
+import time
+import random
+import cloudscraper
 
 
 proxies = {
@@ -9,8 +15,7 @@ proxies = {
     }
 
 
-
-
+scraper = cloudscraper.create_scraper()
 
 
 # desktop user-agent
@@ -18,12 +23,9 @@ USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:65.0) Gecko/20100
 ## mobile user-agent
 MOBILE_USER_AGENT = "Mozilla/5.0 (Linux; Android 7.0; SM-G930V Build/NRD90M) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.125 Mobile Safari/537.36"
 
-# scrapes google search results
-
-
-def banana(city, n):
+# Scrapes google search results
+def articleURL(city, n):
     
-
     query = str(city) + " fire" 
     URL = f"https://news.google.com/search?q={query}"
 
@@ -42,15 +44,23 @@ def banana(city, n):
                     "title": title,
                     "link": link
                     }
-                x = "news.google.com" + item['link']    
+                x = "https://news.google.com" + item['link']    
                 results.append(x)
-                # time.sleep(random.randint(1,4))
+
     new_results = []
-
-    i=0
-
+    i = 0
     while i < n:
         new_results.append(results[i])
-        i+=1
+        i += 1
 
     return new_results[0]
+
+def findTitle(url):
+    page = (scraper.get(url,proxies = proxies).text)
+    soup = BeautifulSoup(page, 'html.parser')
+
+    links = []
+    for link in soup.find_all('title'):
+        links.append(str(link.text))
+
+    return str(links[0])
