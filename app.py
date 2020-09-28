@@ -1,12 +1,5 @@
 import flask
 from flask import request 
-from bs4 import BeautifulSoup
-import requests
-import urllib
-import csv
-from csv import writer
-import time
-import random
 
 
 from ArticleScraper import *
@@ -20,11 +13,8 @@ proxies = {
 }
 
 
-
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
-
-# Create some test data for our catalog in the form of a list of dictionaries.
 
 
 @app.route('/', methods=['GET'])
@@ -33,22 +23,26 @@ def home():
 <p>We are writing a webscraper that compiles data on local fires</p>'''
 
 
-@app.route('/api/articles', methods=['GET'])    # article scraper
-def make_article_scraper():  #n is the number of articles to display
-    # potentially need to update scraper to use google filtered by time instead of news
-    
+@app.route('/api/articles', methods=['GET'])
+  # article scraper
+def article_info():
     city = request.args.get('city')
     n = int(request.args.get('n'))
 
-    return banana(city, n)
+    return articleURL(city, n)
 
+
+@app.route('/api/title', methods=['GET'])
+def title_Finder():
+  url = request.args.get('url')
+  return findTitle(url)
+ 
 
 @app.route('/api/nearCities', methods=['GET'])
 def get_nearby_cities():
     city = request.args.get('city')
-    k = int(request.args.get('k'))
+    k = request.args.get('k')
 
     return nearby_cities(city, k)
 
-if __name__ == "__main__":
-    app.run()
+app.run()
