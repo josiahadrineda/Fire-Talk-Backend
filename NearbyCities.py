@@ -8,6 +8,8 @@ from collections import OrderedDict
 # *Requires pandas 1.1.0 or higher*
 import pandas as pd
 
+from AQI import *
+
 # Basic formatting
 cities = pd.read_csv('worldcities.csv', sep=',')
 
@@ -18,6 +20,8 @@ def nearby_cities(city, k=5):
 
     *Note: The list is of size K+1, the first element being CITY
     and the rest of the list being the nearest K cities*
+
+    *Update: Also returns AQI for CITY*
 
     >>> nearby_cities('Tracy')
     [('Tracy', (0.0, 0.0)), ('Mountain House', (8.12, 13.05)), ('Lathrop', (9.06, 14.57)), ('Manteca', (13.35, 21.47)), ('Discovery Bay', (17.77, 28.58)), ('Ripon', (18.72, 30.11))]
@@ -50,8 +54,7 @@ def nearby_cities(city, k=5):
             c = nearby_cities_dists_list.pop(nearby_cities_list.index(city))
         else:
             nearby_cities_dists_list.pop()
-        nearby_cities_dists_list.insert(0, (city, (0.0, 0.0)))
-        print(nearby_cities_dists_list)
+        nearby_cities_dists_list.insert(0, (city, (get_aqi(lat, long), (0.0, 0.0))))
         return OrderedDict(nearby_cities_dists_list)
     except AttributeError:
         return 'An error occurred, you MONKEY! Try again.'
@@ -99,5 +102,3 @@ def distance(lat, long):
         return pd.Series(dists)
 
     return calculate_distance_haversine
-
-print(nearby_cities('Tracy'))
