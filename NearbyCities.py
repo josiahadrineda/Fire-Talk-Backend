@@ -2,6 +2,13 @@
 distance in mi and km, however, the nearest cities should still be accurate!!!
 Also note that many minor cities might not be included within the csv."""
 
+"""
+To Do:
+- Implement list for geopoints, nearby_cities['geopoint']
+- Return tuples with geopoints and cities, ([geopoints], [cities])
+- Take geopoints and cities data and test Map.py
+"""
+
 # *There might be a query limit for Nominatim...so BEWARE!*
 from geopy.geocoders import Nominatim
 from collections import OrderedDict
@@ -22,6 +29,7 @@ def nearby_cities(city, k=5):
     and the rest of the list being the nearest K cities*
 
     *Update: Also returns AQI for CITY*
+    *Update: Also returns geopoint and city data for Map.py*
 
     >>> nearby_cities('Tracy')
     [('Tracy', (0.0, 0.0)), ('Mountain House', (8.12, 13.05)), ('Lathrop', (9.06, 14.57)), ('Manteca', (13.35, 21.47)), ('Discovery Bay', (17.77, 28.58)), ('Ripon', (18.72, 30.11))]
@@ -54,6 +62,7 @@ def nearby_cities(city, k=5):
         nearby_cities_states = list(nearby_cities['admin_name'])
         nearby_cities_countries = list(nearby_cities['iso3'])
 
+        nearby_cities_geos = list(nearby_cities['geopoint'])
         nearby_cities_list = list(nearby_cities['city'])
         nearby_cities_dists_list = list(zip(nearby_cities['city'], nearby_cities['distance']))
         if city in nearby_cities_list:
@@ -66,7 +75,12 @@ def nearby_cities(city, k=5):
             ci, st, co = nearby_cities_list[i], nearby_cities_states[i], nearby_cities_countries[i]
             _, dist = nearby_cities_dists_list[i]
             nearby_cities_dists_list[i] = (ci, (get_aqi(ci, st, co), dist))
-        return OrderedDict(nearby_cities_dists_list)
+        
+        od = OrderedDict()
+        od['geos'] = nearby_cities_geos
+        od['cities'] = nearby_cities_list
+        od['dists'] = nearby_cities_dists_list
+        return od
     except AttributeError:
         return 'An error occurred, you MONKEY! Try again.'
 
