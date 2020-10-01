@@ -69,6 +69,13 @@ def get_nearby_cities():
     return nearby_cities(city, k)
 
 
+@app.route('/api/paragraph', methods=['GET'])
+def get_paragraph():
+  url = request.args.get('url')
+  return paragraphFinder(url)
+
+
+
 @app.route('/api/map/<city>/<float_list:geopoints>', methods=['GET'])
 def display_map(geopoints, city):
     """
