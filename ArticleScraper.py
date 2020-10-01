@@ -56,7 +56,7 @@ def articleURL(city, n):
             pass
         i += 1
 
-    return new_results if new_results else ''
+    return {i: new_results[i] for i in range(len(new_results))} if new_results else ''
 
 def findTitle(url):
     page = (scraper.get(url, proxies=proxies).text)
