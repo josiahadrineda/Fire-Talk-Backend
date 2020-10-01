@@ -56,10 +56,10 @@ def articleURL(city, n):
             pass
         i += 1
 
-    return new_results[0] if new_results else ''
+    return new_results if new_results else ''
 
 def findTitle(url):
-    page = (scraper.get(url,proxies = proxies).text)
+    page = (scraper.get(url, proxies=proxies).text)
     soup = BeautifulSoup(page, 'html.parser')
 
     links = []
@@ -72,7 +72,7 @@ def findTitle(url):
     return str(links[0]) if links else ''
 
 def paragraphFinder(url):
-    page = (scraper.get(url,proxies = proxies).text)
+    page = (scraper.get(url, proxies=proxies).text)
     soup = BeautifulSoup(page, 'html.parser')
 
     links = []

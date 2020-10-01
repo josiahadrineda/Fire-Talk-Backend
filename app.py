@@ -43,7 +43,15 @@ app.config["DEBUG"] = True
 
 @app.route('/', methods=['GET'])
 def home():
-    return '''<h1>Monkeys write a code that save California </h1>
+    """
+    Call                Description                                                             Syntax
+    /api/articles       Returns a list of webscraped articles regarding local fires.            /api/articles?city={city}&n={n}
+    /api/title          Returns the title of a news article.                                    /api/title?url={url}
+    /api/paragraph      Returns the longest paragraph of a news article.                        /api/paragraph?url={url}
+    /api/nearCities     Returns the nearest k cities based on a central city.                   /api/nearCities/city={city}&k={k}
+    /api/map            Returns a Google Map based on a central city and nearby coordinates.    /api/map/{city}/{geopoints} *{geopoints} = lat1;long1;lat2;long2;...*
+    """
+    return '''<h1>FIRE TALK API CALL CRASH COURSE</h1>
     <p>We are writing a webscraper that compiles data on local fires</p>'''
 
 
@@ -61,6 +69,12 @@ def title_Finder():
     return findTitle(url)
 
 
+@app.route('/api/paragraph', methods=['GET'])
+def get_paragraph():
+  url = request.args.get('url')
+  return paragraphFinder(url)
+
+
 @app.route('/api/nearCities', methods=['GET'])
 def get_nearby_cities():
     city = request.args.get('city')
@@ -69,17 +83,9 @@ def get_nearby_cities():
     return nearby_cities(city, k)
 
 
-@app.route('/api/paragraph', methods=['GET'])
-def get_paragraph():
-  url = request.args.get('url')
-  return paragraphFinder(url)
-
-
 @app.route('/api/map/<city>/<float_list:geopoints>', methods=['GET'])
 def display_map(geopoints, city):
     """
-    Example of usage:
-
     <float_list:geopoints> --> /api/map/37.726;-121.444;37.774;-121.5452;37.809;-121.313
     *Each float is separated by a ;*
     """
