@@ -50,10 +50,13 @@ def articleURL(city, n):
     new_results = []
     i = 0
     while i < n:
-        new_results.append(results[i])
+        try:
+            new_results.append(results[i])
+        except:
+            pass
         i += 1
 
-    return new_results[0]
+    return new_results[0] if new_results else ''
 
 def findTitle(url):
     page = (scraper.get(url,proxies = proxies).text)
@@ -61,12 +64,12 @@ def findTitle(url):
 
     links = []
     for link in soup.find_all('title'):
-        links.append(str(link.text))
+        try:
+            links.append(str(link.text))
+        except:
+            pass
 
-    return str(links[0])
-
-
-
+    return str(links[0]) if links else ''
 
 def paragraphFinder(url):
     page = (scraper.get(url,proxies = proxies).text)
@@ -74,15 +77,9 @@ def paragraphFinder(url):
 
     links = []
     for link in soup.find_all('p'):
-        links.append(str(link.text))
+        try:
+            links.append(str(link.text))
+        except:
+            pass
 
-    return max(str(links[2]),str(links[3]), str(links[4]))
-
-
-
-
-
-
-
-
-
+    return max(links[2:]) if links else ''
