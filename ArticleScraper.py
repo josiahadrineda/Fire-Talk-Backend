@@ -64,3 +64,25 @@ def findTitle(url):
         links.append(str(link.text))
 
     return str(links[0])
+
+
+
+
+def paragraphFinder(url):
+    page = (scraper.get(url,proxies = proxies).text)
+    soup = BeautifulSoup(page, 'html.parser')
+
+    links = []
+    for link in soup.find_all('p'):
+        links.append(str(link.text))
+
+    return max(str(links[2]),str(links[3]), str(links[4]))
+
+
+
+
+
+
+
+
+
