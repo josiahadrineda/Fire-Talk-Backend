@@ -78,8 +78,10 @@ def paragraphFinder(url):
     links = []
     for link in soup.find_all('p'):
         try:
-            links.append(str(link.text))
+            words = str(link.text).split(' ')
+            if len(words) >= 15:
+                links.append(str(link.text))
         except:
             pass
 
-    return max(links[2:]) if links else ''
+    return max(links) if links else ''
