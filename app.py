@@ -75,7 +75,6 @@ def get_paragraph():
   return paragraphFinder(url)
 
 
-
 @app.route('/api/map/<city>/<float_list:geopoints>', methods=['GET'])
 def display_map(geopoints, city):
     """
