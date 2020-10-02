@@ -4,6 +4,7 @@ from werkzeug.routing import BaseConverter
 
 from ArticleScraper import *
 from NearbyCities import *
+from TwitterScraper import *
 from Map import *
 
 class StringListConverter(BaseConverter):
@@ -94,8 +95,13 @@ def home():
         </tr>
         <tr>
             <td>/api/nearCities</td>
-            <td>Returns the nearest k cities based on a central city.</td>
-            <td>/api/nearCities?city={{city}}&k={{k}}</td>
+            <td>Returns the nearest n cities based on a central city.</td>
+            <td>/api/nearCities?city={{city}}&n={{n}}</td>
+        </tr>
+        <tr>
+            <td>/api/tweets</td>
+            <td>Returns the n most recent local tweets regarding #fire.</td>
+            <td>/api/tweets?city={{city}}&n={{n}}</td>
         </tr>
         <tr>
             <td>/api/map</td>
@@ -115,23 +121,33 @@ def article_info():
 
 
 @app.route('/api/title', methods=['GET'])
-def title_Finder():
+def title_finder():
     url = request.args.get('url')
+
     return findTitle(url)
 
 
 @app.route('/api/paragraph', methods=['GET'])
 def get_paragraph():
-  url = request.args.get('url')
-  return paragraphFinder(url)
+    url = request.args.get('url')
+    
+    return paragraphFinder(url)
 
 
 @app.route('/api/nearCities', methods=['GET'])
 def get_nearby_cities():
     city = request.args.get('city')
-    k = int(request.args.get('k'))
+    n = int(request.args.get('n'))
 
-    return nearby_cities(city, k)
+    return nearby_cities(city, n)
+
+
+@app.route('/api/tweets', methods=['GET'])
+def tweet_info():
+    city = request.args.get('city')
+    n = int(request.args.get('n'))
+
+    return scrape_tweets(city, n)
 
 
 @app.route('/api/map/<city>/<float_list:geopoints>', methods=['GET'])
