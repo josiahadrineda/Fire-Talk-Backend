@@ -46,6 +46,14 @@ app.config["DEBUG"] = True
 def home():
     return '''
     <style>
+    h1 {
+        font-size: 75px
+    }
+
+    h3 {
+        font-size: 20px
+    }
+
     h1, h3 {
         text-align: center;
     }
@@ -68,45 +76,52 @@ def home():
     </style>
 
     <h1>FIRE TALK</h1>
-    <h3><i>An on-the-ground life feed of updates to keep you prepared for the worst!</i></h3>
+    <h3><i>An on-the-ground live feed of updates to keep you prepared for the worst!</i></h3>
 
-    <br/>
+    <br><br>
 
     <table>
         <tr>
             <th>Call</th>
             <th>Description</th>
             <th>Syntax</th>
+            <th>Return Type</th>
         </tr>
         <tr>
             <td>/api/articles</td>
             <td>Returns a list of webscraped articles regarding local fires.</td>
             <td>/api/articles?city={{city}}&n={{n}}</td>
+            <td>Dictionary/Hash Table</td>
         </tr>
         <tr>
             <td>/api/title</td>
             <td>Returns the title of a news article.</td>
             <td>/api/title?url={{url}}</td>
+            <td>String</td>
         </tr>
         <tr>
             <td>/api/paragraph</td>
             <td>Returns the longest paragraph of a news article.</td>
             <td>/api/paragraph?url={{url}}</td>
+            <td>String</td>
         </tr>
         <tr>
             <td>/api/nearCities</td>
-            <td>Returns the nearest n cities based on a central city.</td>
+            <td>Returns the nearest n cities, their coordinates, and their<br>AQIs based on a central city.</td>
             <td>/api/nearCities?city={{city}}&n={{n}}</td>
+            <td>Dictionary/Hash Table<br>*contains (mi, km), (lat, lon), and (AQI, level)*</td>
         </tr>
         <tr>
             <td>/api/tweets</td>
-            <td>Returns the n most recent local tweets regarding #fire.</td>
+            <td>Returns the n most recent local tweets regarding fires.</td>
             <td>/api/tweets?city={{city}}&n={{n}}</td>
+            <td>Dictionary/Hash Table</td>
         </tr>
         <tr>
             <td>/api/map</td>
             <td>Returns a Google Map based on a central city and nearby coordinates.</td>
-            <td>/api/map/{{city}}/{{geopoints}} *{{geopoints}} = lat1;long1;lat2;long2;...*</td>
+            <td>/api/map/{{city}}/{{geopoints}}&nbsp;&nbsp;&nbsp;&nbsp;*{{geopoints}} = lat1;lon1;lat2;lon2;...*</td>
+            <td>HTML</td>
         </tr>
     </table>
     '''
