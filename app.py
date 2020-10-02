@@ -89,7 +89,7 @@ def home():
         </tr>
         <tr>
             <td>/api/articles</td>
-            <td>Returns a list of webscraped articles regarding local fires.</td>
+            <td>Returns n news articles regarding fires near a specified city.</td>
             <td>/api/articles?city={{city}}&n={{n}}</td>
             <td>Dictionary/Hash Table</td>
         </tr>
@@ -101,7 +101,7 @@ def home():
         </tr>
         <tr>
             <td>/api/paragraph</td>
-            <td>Returns the longest paragraph of a news article.</td>
+            <td>Returns a brief description of a news article.</td>
             <td>/api/paragraph?url={{url}}</td>
             <td>String</td>
         </tr>
@@ -113,7 +113,7 @@ def home():
         </tr>
         <tr>
             <td>/api/tweets</td>
-            <td>Returns the n most recent local tweets regarding fires.</td>
+            <td>Returns the n most recent tweets regarding fires near a specified city.</td>
             <td>/api/tweets?city={{city}}&n={{n}}</td>
             <td>Dictionary/Hash Table</td>
         </tr>
