@@ -43,16 +43,67 @@ app.config["DEBUG"] = True
 
 @app.route('/', methods=['GET'])
 def home():
-    """
-    Call                Description                                                             Syntax
-    /api/articles       Returns a list of webscraped articles regarding local fires.            /api/articles?city={city}&n={n}
-    /api/title          Returns the title of a news article.                                    /api/title?url={url}
-    /api/paragraph      Returns the longest paragraph of a news article.                        /api/paragraph?url={url}
-    /api/nearCities     Returns the nearest k cities based on a central city.                   /api/nearCities/city={city}&k={k}
-    /api/map            Returns a Google Map based on a central city and nearby coordinates.    /api/map/{city}/{geopoints} *{geopoints} = lat1;long1;lat2;long2;...*
-    """
-    return '''<h1>FIRE TALK API CALL CRASH COURSE</h1>
-    <p>We are writing a webscraper that compiles data on local fires</p>'''
+    return '''
+    <style>
+    h1, h3 {
+        text-align: center;
+    }
+
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #dddddd;
+    }
+    </style>
+
+    <h1>FIRE TALK</h1>
+    <h3><i>An on-the-ground life feed of updates to keep you prepared for the worst!</i></h3>
+
+    <br/>
+
+    <table>
+        <tr>
+            <th>Call</th>
+            <th>Description</th>
+            <th>Syntax</th>
+        </tr>
+        <tr>
+            <td>/api/articles</td>
+            <td>Returns a list of webscraped articles regarding local fires.</td>
+            <td>/api/articles?city={{city}}&n={{n}}</td>
+        </tr>
+        <tr>
+            <td>/api/title</td>
+            <td>Returns the title of a news article.</td>
+            <td>/api/title?url={{url}}</td>
+        </tr>
+        <tr>
+            <td>/api/paragraph</td>
+            <td>Returns the longest paragraph of a news article.l</td>
+            <td>/api/paragraph?url={{url}}</td>
+        </tr>
+        <tr>
+            <td>/api/nearCities</td>
+            <td>Returns the nearest k cities based on a central city.</td>
+            <td>/api/nearCities?city={{city}}&k={{k}}</td>
+        </tr>
+        <tr>
+            <td>/api/map</td>
+            <td>Returns a Google Map based on a central city and nearby coordinates.</td>
+            <td>/api/map/{{city}}/{{geopoints}} *{{geopoints}} = lat1;long1;lat2;long2;...*</td>
+        </tr>
+        </table>
+    '''
 
 
 @app.route('/api/articles', methods=['GET'])
