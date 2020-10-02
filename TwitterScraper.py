@@ -16,16 +16,22 @@ def scrape_tweets(city, n=5):
     api = tw.API(auth, wait_on_rate_limit=True)
 
     city = '+'.join(city.split(' '))
-    filt = ' -filter:retweets'
+    filt = '-filter:retweets'
+    include = ['fire', 'wildfire', 'burning']
+    exclude = ['mixtape', 'track', 'song', 'beat']
+
+    query = city + ' ' + ' OR '.join(include) + ' -' + ' -'.join(exclude) + ' ' + filt
+
     tweets = tw.Cursor(
         api.search,
-        q=[city+filt, 'fire'+filt],
+        q=query,
         lang='en'
     ).items(n)
 
     recent_tweets = []
     for tweet in tweets:
-        recent_tweets.append(tweet.text)
+        text = tweet.text.replace('\n', '').replace('\u2026', '')
+        recent_tweets.append(text)
 
     for tweet in set(recent_tweets):
         if recent_tweets.count(tweet) > 1:
