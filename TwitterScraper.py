@@ -25,12 +25,13 @@ def scrape_tweets(city, n=5):
     tweets = tw.Cursor(
         api.search,
         q=query,
-        lang='en'
+        lang='en',
+        tweet_mode='extended'
     ).items(n)
 
     recent_tweets = []
     for tweet in tweets:
-        text = tweet.text.replace('\n', '').replace('\u2026', '')
+        text = tweet.full_text.replace('\n', '').replace('\u2026', '')
         recent_tweets.append(text)
 
     for tweet in set(recent_tweets):
