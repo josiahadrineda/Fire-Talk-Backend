@@ -102,7 +102,7 @@ def home():
             <td>Returns a Google Map based on a central city and nearby coordinates.</td>
             <td>/api/map/{{city}}/{{geopoints}} *{{geopoints}} = lat1;long1;lat2;long2;...*</td>
         </tr>
-        </table>
+    </table>
     '''
 
 
