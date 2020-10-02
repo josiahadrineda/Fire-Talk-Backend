@@ -107,7 +107,7 @@ def home():
         </tr>
         <tr>
             <td>/api/nearCities</td>
-            <td>Returns the nearest n cities, their coordinates, and their<br>AQIs based on a central city.</td>
+            <td>Returns the nearest n cities, their coordinates, and their AQIs based on a central city.</td>
             <td>/api/nearCities?city={{city}}&n={{n}}</td>
             <td>Dictionary/Hash Table<br>*contains (mi, km), (lat, lon), and (AQI, level)*</td>
         </tr>
