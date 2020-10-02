@@ -89,7 +89,7 @@ def home():
         </tr>
         <tr>
             <td>/api/paragraph</td>
-            <td>Returns the longest paragraph of a news article.l</td>
+            <td>Returns the longest paragraph of a news article.</td>
             <td>/api/paragraph?url={{url}}</td>
         </tr>
         <tr>
