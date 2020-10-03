@@ -73,23 +73,22 @@ def findTitle(url):
         try:
             words = str(link.text).split(' ')
             if len(words) >= 5:
-                links.append(str(link.text).strip())
+                return str(link.text).strip()
         except:
             pass
 
-    return max(links) if links else ''
+    return ''
 
 def paragraphFinder(url):
     page = (scraper.get(url, proxies=proxies).text)
     soup = BeautifulSoup(page, 'html.parser')
 
-    links = []
     for link in soup.find_all('p'):
         try:
             words = str(link.text).split(' ')
             if len(words) >= 15:
-                links.append(str(link.text).strip())
+                return str(link.text).strip()
         except:
             pass
 
-    return max(links) if links else ''
+    return ''
