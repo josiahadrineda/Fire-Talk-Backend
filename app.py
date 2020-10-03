@@ -25,7 +25,6 @@ class FloatListConverter(BaseConverter):
 
 app = flask.Flask(__name__)
 app.url_map.converters['float_list'] = FloatListConverter
-app.url_map.converters['str_list'] = StringListConverter
 app.config["DEBUG"] = True
 
 
