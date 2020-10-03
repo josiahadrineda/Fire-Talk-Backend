@@ -33,7 +33,7 @@ def articleURL(city, n):
     resp = requests.get(URL, headers=headers)
 
     if resp.status_code == 200:
-        soup = BeautifulSoup(resp.content, "html.parser")
+        soup = BeautifulSoup(resp.text, "lxml")
         results = []
         for g in soup.find_all('div', class_='NiLAwe y6IFtc R7GTQ keNKEd j7vNaf nID9nc'):
             anchors = g.find_all('a')
@@ -65,8 +65,8 @@ def articleURL(city, n):
     return ''
 
 def findTitle(url):
-    page = (scraper.get(url, proxies=proxies).text)
-    soup = BeautifulSoup(page, 'html.parser')
+    page = (scraper.get(url).text)
+    soup = BeautifulSoup(page, 'lxml')
 
     links = []
     for link in soup.find_all('title'):
@@ -80,8 +80,8 @@ def findTitle(url):
     return ''
 
 def paragraphFinder(url):
-    page = (scraper.get(url, proxies=proxies).text)
-    soup = BeautifulSoup(page, 'html.parser')
+    page = (scraper.get(url).text)
+    soup = BeautifulSoup(page, 'lxml')
 
     for link in soup.find_all('p'):
         try:
