@@ -7,19 +7,6 @@ from NearbyCities import *
 from TwitterScraper import *
 from Map import *
 
-class StringListConverter(BaseConverter):
-  """Match strings separated with ';'."""
-
-  # At least one string, separated by ;, with optional trailing ;
-  regex = r'.+(?:;.+)*;?'
-
-  # This is used to parse the url and pass the list to the view function
-  def to_python(self, value):
-      return [str(x) for x in value.split(';')]
-
-  # This is used when building a url with url_for
-  def to_url(self, value):
-      return ';'.join(str(x) for x in value)
 
 class FloatListConverter(BaseConverter):
   """Match floats separated with ';'."""
@@ -89,7 +76,7 @@ def home():
         </tr>
         <tr>
             <td>/api/info</td>
-            <td>Returns n local news sources complete with title, description, and url.</td>
+            <td>Returns n news sources based on a central city (complete with title, description, and url).</td>
             <td>/api/info?city={{city}}&n={{n}}</td>
             <td>Dictionary/Hash Table</td>
         </tr>
