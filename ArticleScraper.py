@@ -1,4 +1,4 @@
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, SoupStrainer
 import requests
 import urllib
 import csv
@@ -6,6 +6,8 @@ from csv import writer
 import time
 import random
 import cloudscraper
+
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
 scraper = cloudscraper.create_scraper()
@@ -18,6 +20,7 @@ MOBILE_USER_AGENT = "Mozilla/5.0 (Linux; Android 7.0; SM-G930V Build/NRD90M) App
 
 # Scrapes google search results
 def articleURL(city, n):
+    city = ''.join(city.split(' '))
     
     query = str(city) + " fire" 
     URL = f"https://news.google.com/search?q={query}"
@@ -26,14 +29,26 @@ def articleURL(city, n):
     resp = requests.get(URL, headers=headers)
 
     if resp.status_code == 200:
-        soup = BeautifulSoup(resp.text, "lxml")
+        only_divs = SoupStrainer('div', attrs={'class': 'NiLAwe y6IFtc R7GTQ keNKEd j7vNaf nID9nc'})
+        soup = BeautifulSoup(resp.text, "lxml", parse_only=only_divs)
+
+        processes = []
+        with ThreadPoolExecutor(max_workers=n) as executor:
+            i = 0
+            for g in soup.children:
+                if str(g) == 'html':
+                    continue
+                if i == n:
+                    break
+
+                anchor = g.find('a')
+                if anchor:
+                    processes.append(executor.submit(find_link, anchor))
+                i += 1
+
         results = []
-        for g in soup.find_all('div', class_='NiLAwe y6IFtc R7GTQ keNKEd j7vNaf nID9nc')[:n]:
-            anchors = g.find_all('a')
-            if anchors:
-                link = anchors[0]['href']
-                x = "https://news.google.com" + link 
-                results.append(x)
+        for task in as_completed(processes):
+            results.append(task.result())
 
         if results:
             for i in range(len(results)):
@@ -44,12 +59,21 @@ def articleURL(city, n):
 
     return ''
 
+def find_link(anchor):
+    link = anchor['href']
+    x = "https://news.google.com" + link
+    return x
+
 def findTitle(url):
     page = (scraper.get(url).text)
-    soup = BeautifulSoup(page, 'lxml')
+    titles = SoupStrainer('title')
+    soup = BeautifulSoup(page, 'lxml', parse_only=titles)
 
     links = []
-    for link in soup.find_all('title'):
+    for link in soup.children:
+        if str(link) == 'html':
+            continue
+
         try:
             words = str(link.text).split(' ')
             if len(words) >= 5:
@@ -61,9 +85,13 @@ def findTitle(url):
 
 def paragraphFinder(url):
     page = (scraper.get(url).text)
-    soup = BeautifulSoup(page, 'lxml')
+    ps = SoupStrainer('p')
+    soup = BeautifulSoup(page, 'lxml', parse_only=ps)
 
-    for link in soup.find_all('p'):
+    for link in soup.children:
+        if str(link) == 'html':
+            continue
+
         try:
             words = str(link.text).split(' ')
             if len(words) >= 15:
