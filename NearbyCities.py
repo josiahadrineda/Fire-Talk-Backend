@@ -2,13 +2,6 @@
 distance in mi and km, however, the nearest cities should still be accurate!!!
 Also note that many minor cities might not be included within the csv."""
 
-"""
-To Do:
-- Implement list for geopoints, nearby_cities['geopoint']
-- Return tuples with geopoints and cities, ([geopoints], [cities])
-- Take geopoints and cities data and test Map.py
-"""
-
 # *There might be a query limit for Nominatim...so BEWARE!*
 from geopy.geocoders import Nominatim
 from collections import OrderedDict
@@ -78,7 +71,6 @@ def nearby_cities(city, k=5):
         
         od = OrderedDict()
         od['geos'] = nearby_cities_geos
-        od['cities'] = nearby_cities_list
         od['dists'] = nearby_cities_dists_list
         return od
     except AttributeError:
