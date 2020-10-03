@@ -8,13 +8,6 @@ import random
 import cloudscraper
 
 
-proxies = {
-    'http': '87.126.43.160:8080',
-    'http': '212.154.58.99:37470',
-    'http': '134.122.124.106:3128',
-}
-
-
 scraper = cloudscraper.create_scraper()
 
 
@@ -35,33 +28,20 @@ def articleURL(city, n):
     if resp.status_code == 200:
         soup = BeautifulSoup(resp.text, "lxml")
         results = []
-        for g in soup.find_all('div', class_='NiLAwe y6IFtc R7GTQ keNKEd j7vNaf nID9nc'):
+        for g in soup.find_all('div', class_='NiLAwe y6IFtc R7GTQ keNKEd j7vNaf nID9nc')[:n]:
             anchors = g.find_all('a')
             if anchors:
                 link = anchors[0]['href']
-                title = g.find('h3').text
-                item = {
-                    "title": title,
-                    "link": link
-                    }
-                x = "https://news.google.com" + item['link']    
+                x = "https://news.google.com" + link 
                 results.append(x)
 
-    new_results = []
-    i = 0
-    while i < n:
-        try:
-            new_results.append(results[i])
-        except:
-            pass
-        i += 1
+        if results:
+            for i in range(len(results)):
+                r = requests.get(results[i])
+                url = str(r.url).strip().replace('\r', '').replace('\n', '')
+                results[i] = url
+            return results
 
-    if new_results:
-        for i in range(len(new_results)):
-            r = requests.get(new_results[i])
-            url = str(r.url).strip().replace('\r', '').replace('\n', '')
-            new_results[i] = url
-        return new_results
     return ''
 
 def findTitle(url):
