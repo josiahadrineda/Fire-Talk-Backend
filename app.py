@@ -149,6 +149,43 @@ def get_paragraph():
     return paragraphFinder(url)
 
 
+
+@app.route('/api/names', methods=['GET'])
+def get_everthing():
+    city = request.args.get('city')
+    n = int(request.args.get('n'))
+    blank_dict = {}
+    article_list = []
+    master_list = []
+
+    for i in articleURL(city, n):
+        article_list.append(i) #list of urls
+
+    
+
+    for url in article_list:
+        blank_dict = {}
+        blank_dict['url'] = url
+        blank_dict['title'] = findTitle(url)
+        blank_dict['paragraph'] = get_paragraph(url)
+
+        master_list.append(blank_dict)
+
+
+    return master_list[0]
+
+
+
+
+    
+
+
+
+
+
+
+
+
 @app.route('/api/nearCities', methods=['GET'])
 def get_nearby_cities():
     city = request.args.get('city')
