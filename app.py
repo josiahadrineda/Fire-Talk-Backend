@@ -109,11 +109,11 @@ def get_info():
     info = {}
     urls = [url for url in articleURL(city, n)]
 
-    for url in urls:
+    for i, url in enumerate(urls):
         title = findTitle(url)
         paragraph = paragraphFinder(url)
         
-        info[title] = {'paragraph': paragraph, 'url': url}
+        info[i] = {'title': title, 'paragraph': paragraph, 'url': url}
 
     return info
 
