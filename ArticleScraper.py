@@ -59,8 +59,9 @@ def articleURL(city, n):
     if new_results:
         for i in range(len(new_results)):
             r = requests.get(new_results[i])
-            new_results[i] = str(r.url)
-        return {ind: res for ind, res in enumerate(new_results)}
+            url = str(r.url).strip().replace('\r', '').replace('\n', '')
+            new_results[i] = url
+        return new_results
     return ''
 
 def findTitle(url):
@@ -72,7 +73,7 @@ def findTitle(url):
         try:
             words = str(link.text).split(' ')
             if len(words) >= 5:
-                links.append(str(link.text))
+                links.append(str(link.text).strip())
         except:
             pass
 
@@ -87,7 +88,7 @@ def paragraphFinder(url):
         try:
             words = str(link.text).split(' ')
             if len(words) >= 15:
-                links.append(str(link.text))
+                links.append(str(link.text).strip())
         except:
             pass
 

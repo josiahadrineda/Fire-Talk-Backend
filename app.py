@@ -88,22 +88,10 @@ def home():
             <th>Return Type</th>
         </tr>
         <tr>
-            <td>/api/articles</td>
-            <td>Returns n news articles regarding fires near a specified city.</td>
-            <td>/api/articles?city={{city}}&n={{n}}</td>
+            <td>/api/info</td>
+            <td>Returns n local news sources complete with title, description, and url.</td>
+            <td>/api/info?city={{city}}&n={{n}}</td>
             <td>Dictionary/Hash Table</td>
-        </tr>
-        <tr>
-            <td>/api/title</td>
-            <td>Returns the title of a news article.</td>
-            <td>/api/title?url={{url}}</td>
-            <td>String</td>
-        </tr>
-        <tr>
-            <td>/api/paragraph</td>
-            <td>Returns a brief description of a news article.</td>
-            <td>/api/paragraph?url={{url}}</td>
-            <td>String</td>
         </tr>
         <tr>
             <td>/api/nearCities</td>
@@ -127,63 +115,21 @@ def home():
     '''
 
 
-@app.route('/api/articles', methods=['GET'])
-def article_info():
+@app.route('/api/info', methods=['GET'])
+def get_info():
     city = request.args.get('city')
     n = int(request.args.get('n'))
 
-    return articleURL(city, n)
+    info = {}
+    urls = [url for url in articleURL(city, n)]
 
+    for url in urls:
+        title = findTitle(url)
+        paragraph = paragraphFinder(url)
+        
+        info[title] = {'paragraph': paragraph, 'url': url}
 
-@app.route('/api/title', methods=['GET'])
-def title_finder():
-    url = request.args.get('url')
-
-    return findTitle(url)
-
-
-@app.route('/api/paragraph', methods=['GET'])
-def get_paragraph():
-    url = request.args.get('url')
-    
-    return paragraphFinder(url)
-
-
-
-@app.route('/api/names', methods=['GET'])
-def get_everthing():
-    city = request.args.get('city')
-    n = int(request.args.get('n'))
-    blank_dict = {}
-    article_list = []
-    master_list = []
-
-    for i in articleURL(city, n):
-        article_list.append(i) #list of urls
-
-    
-
-    for url in article_list:
-        blank_dict = {}
-        blank_dict['url'] = url
-        blank_dict['title'] = findTitle(url)
-        blank_dict['paragraph'] = get_paragraph(url)
-
-        master_list.append(blank_dict)
-
-
-    return master_list[0]
-
-
-
-
-    
-
-
-
-
-
-
+    return info
 
 
 @app.route('/api/nearCities', methods=['GET'])

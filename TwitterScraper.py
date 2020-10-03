@@ -31,7 +31,7 @@ def scrape_tweets(city, n=5):
 
     recent_tweets = []
     for tweet in tweets:
-        text = tweet.full_text.replace('\n', '').replace('\u2026', '')
+        text = tweet.full_text.strip().replace('\n', '').replace('\u2026', '')
         recent_tweets.append(text)
 
     for tweet in set(recent_tweets):
