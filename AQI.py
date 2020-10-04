@@ -34,6 +34,7 @@ def rank_aqi(aqi):
         "Very Unhealthy",
         "Hazardous"]
 
-    aqi = min(aqi, 300)
-    aqi = max(aqi // 50 - 1, 0) if aqi % 50 == 0 else aqi // 50
+    if aqi > 300:
+        return ranks[-1]
+    aqi = min(max(aqi // 50 - 1, 0) if aqi % 50 == 0 else aqi // 50, 4
     return ranks[aqi]
