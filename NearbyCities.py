@@ -23,33 +23,12 @@ def nearby_cities(city, k=5):
 
     *Update: Also returns AQI for CITY*
     *Update: Also returns geopoint and city data for Map.py*
-
-    >>> nearby_cities('Tracy')
-    [('Tracy', (0.0, 0.0)), ('Mountain House', (8.12, 13.05)), ('Lathrop', (9.06, 14.57)), ('Manteca', (13.35, 21.47)), ('Discovery Bay', (17.77, 28.58)), ('Ripon', (18.72, 30.11))]
-    >>> nearby_cities('Thousand Oaks', k=10)
-    [('Thousand Oaks', (0.0, 0.0)), ('Westlake Village', (6.51, 10.47)), ('Camarillo', (9.09, 14.62)), ('Moorpark', (9.44, 15.19)), ('Oak Park', (9.62, 15.48)), ('Agoura Hills', (10.1, 16.25)), ('Simi Valley', (13.18, 21.2)), ('Malibu', (13.7, 22.04)), ('Calabasas', (16.32, 26.25)), ('El Rio', (17.42, 28.02)), ('Santa Paula', (17.98, 28.92))]
-    >>> nearby_cities('New Yark')
-    'You misspelled your city, you MONKEY! Try again.'
     """
     assert k > 0, 'K must be a positive integer.'
     
     global cities
 
     try:
-        # Check whether CITY exists in cities.csv
-        # If not, find the city that most closely resembles CITY
-        cities_list = list(cities['city'])
-        if city not in cities_list:
-            ref = ''.join(city.split(' ')).lower()
-            curr_min, curr_city = float('inf'), None
-            for c in cities_list:
-                word = ''.join(c.split(' ')).lower()
-                d = minimum_edit_distance(ref, word)
-                if d < curr_min:
-                    curr_min = d
-                    curr_city = c
-            city = curr_city
-
         # Determine the coordinates of CITY
         geolocator = Nominatim(user_agent="Fire Watch")
         location = geolocator.geocode(city)
@@ -60,10 +39,9 @@ def nearby_cities(city, k=5):
         
         # CITY is most likely to be in nearby_cities
         nearby_cities = cities.head(k+1)
-
-        # *This function will now only apply INSIDE THE STATES*
+        
         nearby_cities_states = list(nearby_cities['admin_name'])
-        nearby_cities_countries = list(nearby_cities['iso3'])
+        nearby_cities_countries = list(nearby_cities['country'])
 
         nearby_cities_geos = list(nearby_cities['geopoint'])
         nearby_cities_list = list(nearby_cities['city'])
@@ -85,23 +63,6 @@ def nearby_cities(city, k=5):
         return od
     except AttributeError:
         return 'An error occurred, you MONKEY! Try again.'
-
-from functools import lru_cache
-
-@lru_cache(maxsize=None)
-def minimum_edit_distance(reference, word):
-    """Compares a WORD to REFERENCE and quantifies how closesly
-    they resemble one another.
-    """
-
-    if not reference or not word:
-        return len(reference) or len(word)
-    else:
-        add = 1 + minimum_edit_distance(reference[1:], word)
-        rem = 1 + minimum_edit_distance(reference, word[1:])
-        sub = (reference[0] != word[0]) + minimum_edit_distance(reference[1:], word[1:])
-
-        return min(add, rem, sub)
 
 
 from math import sqrt, sin, cos, atan2, radians
