@@ -8,7 +8,6 @@ from NearbyCities import *
 from TwitterScraper import *
 from Map import *
 
-
 class FloatListConverter(BaseConverter):
   """Match floats separated with ';'."""
 
@@ -102,9 +101,13 @@ def home():
     '''
 
 
+# Basic formatting (REPETITION ISSUE. FIX SOMETIME SOON)
+cities = pd.read_csv('worldcities.csv', sep=',')
+cities_list = list(cities['city'])
+
 @app.route('/api/info', methods=['GET'])
 def get_info():
-    city = auto_correct(request.args.get('city'))
+    city = auto_correct(cities_list, request.args.get('city'))
     n = int(request.args.get('n'))
 
     info = {}
@@ -121,7 +124,7 @@ def get_info():
 
 @app.route('/api/nearCities', methods=['GET'])
 def get_nearby_cities():
-    city = auto_correct(request.args.get('city'))
+    city = auto_correct(cities_list, request.args.get('city'))
     n = int(request.args.get('n'))
 
     return nearby_cities(city, n)
@@ -129,7 +132,7 @@ def get_nearby_cities():
 
 @app.route('/api/tweets', methods=['GET'])
 def tweet_info():
-    city = auto_correct(request.args.get('city'))
+    city = auto_correct(cities_list, request.args.get('city'))
     n = int(request.args.get('n'))
 
     return scrape_tweets(city, n)
@@ -141,7 +144,7 @@ def display_map(geopoints, city):
     <float_list:geopoints> --> /api/map/37.726;-121.444;37.774;-121.5452;37.809;-121.313
     *Each float is separated by a ;*
     """
-
+    city = auto_correct(cities_list, city)
     return generate_map(geopoints, city)
 
 

@@ -1,11 +1,8 @@
 import pandas as pd
 from functools import lru_cache
 
-# Basic formatting
-cities = pd.read_csv('worldcities.csv', sep=',')
-
-def auto_correct(city):
-    cities_list = list(cities['city'])
+def auto_correct(cities_list, city):
+    city = city.title()
     if city not in cities_list:
         ref = ''.join(city.split(' ')).lower()
         curr_min, curr_city = float('inf'), None
