@@ -2,6 +2,7 @@ import flask
 from flask import request
 from werkzeug.routing import BaseConverter
 
+from AutoCorrect import *
 from ArticleScraper import *
 from NearbyCities import *
 from TwitterScraper import *
@@ -103,7 +104,7 @@ def home():
 
 @app.route('/api/info', methods=['GET'])
 def get_info():
-    city = request.args.get('city')
+    city = auto_correct(request.args.get('city'))
     n = int(request.args.get('n'))
 
     info = {}
@@ -120,7 +121,7 @@ def get_info():
 
 @app.route('/api/nearCities', methods=['GET'])
 def get_nearby_cities():
-    city = request.args.get('city')
+    city = auto_correct(request.args.get('city'))
     n = int(request.args.get('n'))
 
     return nearby_cities(city, n)
@@ -128,7 +129,7 @@ def get_nearby_cities():
 
 @app.route('/api/tweets', methods=['GET'])
 def tweet_info():
-    city = request.args.get('city')
+    city = auto_correct(request.args.get('city'))
     n = int(request.args.get('n'))
 
     return scrape_tweets(city, n)
