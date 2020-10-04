@@ -19,7 +19,7 @@ def scrape_tweets(city, n=5):
     city = '+'.join(city.split(' '))
     filt = '-filter:retweets'
     include = ['fire', 'wildfire', 'burning']
-    exclude = ['mixtape', 'track', 'song', 'beat']
+    exclude = ['mixtape', 'track', 'song', 'beat', 'remix']
 
     query = city + ' ' + ' OR '.join(include) + ' -' + ' -'.join(exclude) + ' ' + filt
 
