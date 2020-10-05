@@ -1,9 +1,14 @@
+"""For use in ArticleScraper.py"""
+
 from scrapyscript import Job, Processor
 from scrapy.spiders import Spider
 from scrapy import Request
 import json
 
 class PySpider(Spider):
+    """Article scraping mechanism.
+    """
+
     name = 'spi'
     n = 0
 
@@ -16,6 +21,9 @@ class PySpider(Spider):
             yield {'link': f'https://news.google.com{link}'}
 
 def scrape_articles(city, n):
+    """Returns N articles regarding fires at or near CITY.
+    """
+
     google_job = Job(PySpider, url=f'https://news.google.com/search?q={city} fire')
 
     PySpider.n = n

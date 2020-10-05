@@ -1,5 +1,6 @@
 import requests
 from random import shuffle
+
 from AutoCorrect import *
 
 with open('aqikey.txt') as f:
@@ -12,14 +13,14 @@ def get_aqi(city, state, country):
     """
     inds = list(range(len(keys)))
 
-    # Fix formatting issue
+    # Fixes formatting issue
     if country == 'United States':
         country = 'USA'
     else:
         available_countries = ['Afghanistan', 'Algeria', 'Andorra', 'Angola', 'Argentina', 'Armenia', 'Australia', 'Austria', 'Bahamas', 'Bahrain', 'Bangladesh', 'Belgium', 'Bosnia Herzegovina', 'Brazil', 'Bulgaria', 'Canada', 'Chile', 'China', 'Colombia', 'Croatia', 'Cyprus', 'Czech Republic', 'Denmark', 'Ecuador', 'Ethiopia', 'Finland', 'France', 'Germany', 'Ghana', 'Guatemala', 'Hong Kong SAR', 'Hungary', 'India', 'Indonesia', 'Iran', 'Iraq', 'Ireland', 'Israel', 'Italy', 'Ivory Coast', 'Japan', 'Jordan', 'Kazakhstan', 'Kosovo', 'Kuwait', 'Kyrgyzstan', 'Latvia', 'Lithuania', 'Luxembourg', 'Macao SAR', 'Malaysia', 'Malta', 'Mexico', 'Mongolia', 'Myanmar', 'Nepal', 'Netherlands', 'New Caledonia', 'New Zealand', 'Nigeria', 'North Macedonia', 'Norway', 'Oman', 'Pakistan', 'Peru', 'Philippines', 'Poland', 'Portugal', 'Puerto Rico', 'Romania', 'Russia', 'San Marino', 'Serbia', 'Singapore', 'Slovakia', 'Slovenia', 'South Africa', 'South Korea', 'Spain', 'Sri Lanka', 'Sweden', 'Switzerland', 'Syria', 'Taiwan', 'Thailand', 'Turkey', 'U.S. Virgin Islands', 'USA', 'Uganda', 'Ukraine', 'United Arab Emirates', 'United Kingdom', 'Uzbekistan', 'Vietnam', 'Yemen']
         country = auto_correct(available_countries, country)
     
-    # Want to minimize API calls
+    # Goal: Minimize API calls
     if country == 'USA':
         available_states_US = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'Washington, D.C.', 'West Virginia', 'Wisconsin', 'Wyoming']
         state = auto_correct(available_states_US, state)
@@ -43,15 +44,21 @@ def get_aqi(city, state, country):
     return keep_trying(0, inds, get_aqi_helper, {"AQI": "city_not_found", "Level": "N/A"})
 
 def keep_trying(ind, inds, fn, fail):
+    """A persisting function (used for cycling through API keys).
+    """
+
     if ind >= len(inds):
         return fail
-
-    try:
-        return fn(keys[inds[ind]])
-    except:
-        return keep_trying(ind+1, inds, fn, fail)
+    else:
+        try:
+            return fn(keys[inds[ind]])
+        except:
+            return keep_trying(ind+1, inds, fn, fail)
 
 def input_country(country):
+    """Uses a specified COUNTRY to return an autocorrected state.
+    """
+
     def get_states(key):
         url = f'http://api.airvisual.com/v2/states?country={country}&key={key}'
         response = requests.request("GET", url)
@@ -65,6 +72,9 @@ def input_country(country):
     return get_states
 
 def input_state_country(state, country):
+    """Uses a specified STATE and COUNTRY to return an autocorrected city.
+    """
+
     def get_cities(key):
         url = f'http://api.airvisual.com/v2/cities?state={state}&country={country}&key={key}'
         response = requests.request("GET", url)
@@ -78,6 +88,9 @@ def input_state_country(state, country):
     return get_cities
 
 def input_city_state_country(city, state, country):
+    """Uses a specified CITY, STATE, and COUNTRY to return autocorrected AQI info.
+    """
+
     def get_aqi_helper(key):
         url = f"http://api.airvisual.com/v2/city?city={city}&state={state}&country={country}&key={key}"
         response = requests.request("GET", url)
@@ -101,5 +114,7 @@ def rank_aqi(aqi):
 
     if aqi > 300:
         return ranks[-1]
-    aqi = min(max(aqi // 50 - 1, 0) if aqi % 50 == 0 else aqi // 50, 4)
-    return ranks[aqi]
+    else:
+        bin_shift = max(aqi // 50 - 1, 0)
+        ind = min(bin_shift if aqi % 50 == 0 else aqi // 50, 4)
+        return ranks[ind]
