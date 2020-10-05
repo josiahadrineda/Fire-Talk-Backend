@@ -8,7 +8,7 @@ import random
 import cloudscraper
 
 from concurrent.futures import ThreadPoolExecutor, as_completed
-
+from GoogleScrapy import *
 
 scraper = cloudscraper.create_scraper()
 
@@ -18,6 +18,8 @@ USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:65.0) Gecko/20100
 # Mobile user-agent
 MOBILE_USER_AGENT = "Mozilla/5.0 (Linux; Android 7.0; SM-G930V Build/NRD90M) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.125 Mobile Safari/537.36"
 
+# DEPRECATED !!!
+"""
 # Scrapes google search results
 def articleURL(city, n):
     city = ''.join(city.split(' '))
@@ -62,7 +64,15 @@ def articleURL(city, n):
 def find_link(anchor):
     link = anchor['href']
     x = "https://news.google.com" + link
-    return x
+    return x"""
+
+def find_articles(city, n):
+    urls = [link['link'].replace("['", "").replace("']", "") for link in scrape_articles(city, n)]
+    
+    reformat = lambda u: str(requests.get(u).url).strip().replace('\r', '').replace('\n', '')
+    urls = [reformat(url) for url in urls]
+
+    return urls
 
 def findTitle(url):
     page = (scraper.get(url).text)
