@@ -1,5 +1,6 @@
 import flask
 from flask import request
+from flask_cors import CORS
 from werkzeug.routing import BaseConverter
 
 from AutoCorrect import *
@@ -26,6 +27,7 @@ class FloatListConverter(BaseConverter):
 app = flask.Flask(__name__)
 app.url_map.converters['float_list'] = FloatListConverter
 app.config["DEBUG"] = True
+CORS(app)
 
 
 @app.route('/', methods=['GET'])
