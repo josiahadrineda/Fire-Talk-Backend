@@ -5,6 +5,7 @@ from werkzeug.routing import BaseConverter
 
 from AutoCorrect import *
 from ArticleScraper import *
+from GoogleScrapy import *
 from NearbyCities import *
 from TwitterScraper import *
 from Map import *
@@ -112,9 +113,9 @@ def get_info():
     city = auto_correct(cities_list, request.args.get('city'))
     n = int(request.args.get('n'))
 
-    info = {}
-    urls = [url for url in articleURL(city, n)]
+    urls = find_articles(city, n)
 
+    info = {}
     for i, url in enumerate(urls):
         title = findTitle(url)
         paragraph = paragraphFinder(url)

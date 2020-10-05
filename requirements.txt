@@ -3,7 +3,7 @@ bs4==0.0.1
 Click==7.0
 cloudscraper==1.2.48
 Flask==1.1.1
-flask-cors==3.0.9
+Flask-cors==3.0.9
 geopy==2.0.0
 gunicorn==20.0.4
 itsdangerous==1.1.0
@@ -12,5 +12,7 @@ lxml==4.5.0
 MarkupSafe==1.1.1
 pandas==1.1.2
 requests==2.22.0
+Scrapy==2.3.0
+scrapyscript==1.1.0
 tweepy==3.9.0
 Werkzeug==1.0.0
