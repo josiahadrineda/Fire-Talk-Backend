@@ -1,5 +1,6 @@
 import flask
-from flask import render_template, request
+import json
+from flask import make_response, render_template, request
 from flask_cors import CORS
 from werkzeug.routing import BaseConverter
 
@@ -9,6 +10,11 @@ from GoogleScrapy import *
 from NearbyCities import *
 from TwitterScraper import *
 from Map import *
+
+app = flask.Flask(__name__)
+app.config["DEBUG"] = True
+
+CORS(app)
 
 # For use in display_map (NOT IN USE YET !!!)
 class FloatListConverter(BaseConverter):
@@ -25,22 +31,46 @@ class FloatListConverter(BaseConverter):
   def to_url(self, value):
       return ';'.join(str(x) for x in value)
 
-app = flask.Flask(__name__)
-app.config["DEBUG"] = True
 app.url_map.converters['float_list'] = FloatListConverter
-
-CORS(app)
 
 @app.route('/', methods=['GET'])
 def home():
     return render_template('index.html')
+
+@app.route('/cookie')
+def cookie():
+    res = make_response("Setting a cookie")
+    res.set_cookie('foo', 'bar', max_age=60*60*24*365*2)
+    return res
 
 @app.route('/api/info', methods=['GET'])
 def get_info():
     city = auto_correct(cities_list, request.args.get('city'))
     n = int(request.args.get('n'))
 
-    return find_info(city, n)
+    first_n, rest = find_info(city, n)
+
+    response = make_response(first_n)
+    response.set_cookie('all_urls', json.dumps(rest))
+
+    return response
+
+@app.route('/api/moreInfo', methods=['GET'])
+def get_more_info():
+    n = int(request.args.get('n'))
+
+    all_urls = json.loads(request.cookies.get('all_urls'))
+
+    next_n, rest = find_more_info(all_urls, n)
+
+    response = make_response(next_n)
+    
+    if not next_n:
+        response.delete_cookie('all_urls')
+    else:
+        response.set_cookie('all_urls', json.dumps(rest))
+
+    return response
 
 @app.route('/api/nearCities', methods=['GET'])
 def get_nearby_cities():
