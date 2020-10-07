@@ -50,7 +50,12 @@ def get_info():
 
     first_n, rest = find_info(city, n)
 
-    response = make_response(first_n)
+    response = app.response_class(
+        response=json.dumps(first_n),
+        status=200,
+        mimetype='application/json'
+    )
+
     response.set_cookie('all_urls', json.dumps(rest))
 
     return response
@@ -63,8 +68,12 @@ def get_more_info():
 
     next_n, rest = find_more_info(all_urls, n)
 
-    response = make_response(next_n)
-    
+    response = app.response_class(
+        response=json.dumps(next_n),
+        status=200,
+        mimetype='application/json'
+    )
+
     if not next_n:
         response.delete_cookie('all_urls')
     else:
