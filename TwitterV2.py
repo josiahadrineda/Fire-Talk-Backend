@@ -30,7 +30,12 @@ def create_url(city, n):
     """Generates N urls based on a query for a specified CITY.
     """
 
-    query = f"{city} fire -is:retweet"
+    city = '+'.join(city.split(' '))
+    filt = '-is:retweet'
+    include = [city + ' ' + word for word in ['fire', 'wildfire', 'burning']]
+    exclude = ['mixtape', 'track', 'song', 'beat', 'remix', 'drip']
+    query = ' OR '.join(include) + ' -' + ' -'.join(exclude) + ' ' + filt
+
     expansions = "expansions=author_id"
     tweet = "tweet.fields=author_id,id"
     user = "user.fields=username"
@@ -70,3 +75,5 @@ def reformat(info):
     for ind, (user, text, src) in enumerate(zip(users, texts, srcs)):
         tweet_info[ind] = {"user": user, "text": text, "src": src}
     return tweet_info
+
+print(scrape_tweets("Tracy", 10))
