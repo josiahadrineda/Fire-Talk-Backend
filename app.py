@@ -8,7 +8,7 @@ from AutoCorrect import *
 from ArticleScraper import *
 from GoogleScrapy import *
 from NearbyCities import *
-from TwitterScraper import *
+from TwitterV2 import *
 from Map import *
 
 app = flask.Flask(__name__)
@@ -93,6 +93,7 @@ def get_tweets():
     city = auto_correct(cities_list, request.args.get('city'))
     n = int(request.args.get('n'))
 
+    # Make sure to specify N >= 10 !!!
     return scrape_tweets(city, n)
 
 # NOT IN USE YET !!!
