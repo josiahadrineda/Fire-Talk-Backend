@@ -11,9 +11,17 @@ with open('BearerToken.txt', 'r') as f:
 def auth():
     return bt
 
+"""
+To Do:
+- Reformatting
+- 'Cheat' twitter url
+- Put in function, add params
+- Integrate with API
+"""
 
 def create_url():
-    query = "keyword:fire"
+    query = "from:twitterdev -is:retweet"
+    query2 = "Tracy fire -is:retweet"
     # Tweet fields are adjustable.
     # Options include:
     # attachments, author_id, context_annotations,
@@ -21,11 +29,12 @@ def create_url():
     # in_reply_to_user_id, lang, non_public_metrics, organic_metrics,
     # possibly_sensitive, promoted_metrics, public_metrics, referenced_tweets,
     # source, text, and withheld
-    text = "tweet.fields=text"
-    tweet_id = "tweet.fields=id"
-    username = "user.fields=username"
-    url = "https://api.twitter.com/2/tweets/search/recent?query={}&{}&{}".format(
-        query, text, username
+    expansions = "expansions=author_id"
+    tweet = "tweet.fields=author_id,id"
+    user = "user.fields=username"
+    max_results = "max_results=10"
+    url = "https://api.twitter.com/2/tweets/search/recent?query={}&{}&{}&{}".format(
+        query2, max_results, expansions, tweet, user
     )
     return url
 
