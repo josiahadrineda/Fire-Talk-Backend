@@ -1,3 +1,5 @@
+"""DEPRECATED !!!"""
+
 import tweepy as tw
 from flask import jsonify
 
