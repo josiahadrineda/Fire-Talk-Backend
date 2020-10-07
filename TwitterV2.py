@@ -75,5 +75,3 @@ def reformat(info):
     for ind, (user, text, src) in enumerate(zip(users, texts, srcs)):
         tweet_info[ind] = {"user": user, "text": text, "src": src}
     return tweet_info
-
-print(scrape_tweets("Tracy", 10))
