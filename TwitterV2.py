@@ -1,8 +1,11 @@
+import pandas as pd
 import requests
 import json
 
 with open('BearerToken.txt', 'r') as f:
     bt = f.readline()
+
+banned_word_list = list(pd.read_csv('Terms-to-Block.csv').iloc[:, 0])
 
 def scrape_tweets(city, n):
     """Aggregation of below helpers.
@@ -33,7 +36,7 @@ def create_url(city, n):
     city = '+'.join(city.split(' '))
     filt = '-is:retweet'
     include = [city + ' ' + word for word in ['fire', 'wildfire', 'burning']]
-    exclude = ['mixtape', 'track', 'song', 'beat', 'remix', 'drip']
+    exclude = ['mixtape', 'track', 'song', 'beat', 'remix', 'drip'] + banned_word_list
     query = ' OR '.join(include) + ' -' + ' -'.join(exclude) + ' ' + filt
 
     expansions = "expansions=author_id"
