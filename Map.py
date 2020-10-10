@@ -1,11 +1,12 @@
 """In order to get geopoints, use the NearbyCities API call !!!"""
 
+import os
 from bokeh.plotting import gmap, ColumnDataSource
 from bokeh.models import GMapOptions 
 from bokeh.embed import file_html
 from bokeh.resources import CDN
 
-key = open('googlekey.txt').read()
+key = os.environ['GOOGLE_KEY']
 def generate_map(geopoints, city):
     """Generates a Google map based on GEOPOINTS and a central CITY.
 
