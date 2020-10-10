@@ -1,10 +1,9 @@
 import pandas as pd
 import requests
 import json
+import os
 
-with open('BearerToken.txt', 'r') as f:
-    bt = f.readline()
-
+bt = os.environ['BEARER_TOKEN']
 banned_word_list = list(pd.read_csv('Terms-to-Block.csv').iloc[:, 0])
 
 def scrape_tweets(city, n):

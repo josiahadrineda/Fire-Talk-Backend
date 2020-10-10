@@ -1,11 +1,10 @@
+import os
 import requests
 from random import shuffle
 
 from AutoCorrect import *
 
-with open('aqikey.txt') as f:
-    contents = f.readlines()
-keys = [line.strip().replace('\n', '') for line in contents]
+keys = [os.environ[f'AQI_KEY_{i}'] for i in range(1, 15)]
 
 def get_aqi(city, state, country):
     """Gets the AQI and level of health concern for a specified
