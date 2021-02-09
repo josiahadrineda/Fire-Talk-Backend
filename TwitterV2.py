@@ -38,15 +38,14 @@ def create_url(city, n):
     exclude = ['mixtape', 'track', 'song', 'beat', 'remix', 'drip'] + banned_word_list
     query = ' OR '.join(include) + ' -' + ' -'.join(exclude) + ' ' + filt
 
-    expansions = "expansions=author_id"
+    max_results = f"max_results={n}"twurl /1.1/statuses/user_timeline.json?count=1 | jq
     tweet = "tweet.fields=author_id,id,created_at"
+    expansions = "expansions=author_id"
     user = "user.fields=username,name,profile_image_url"
-    max_results = f"max_results={n}"
-    """url = "https://api.twitter.com/2/tweets/search/recent?query={}&{}&{}&{}&{}".format(
-        query, max_results, expansions, tweet, user
-    )"""
-    return "https://api.twitter.com/2/users/by?usernames=TwitterDev,TwitterAPI&user.fields=description,created_at"
-    # return url
+    url = "https://api.twitter.com/2/tweets/search/recent?query={}&{}&{}&{}&{}".format(
+        query, max_results, tweet, expansions, user
+    )
+    return url
 
 def create_headers(bearer_token):
     """Generates header for a Twitter Developer Bearer Token.
@@ -69,7 +68,7 @@ def reformat(info):
     """Molds the generated tweet info into the desirable format for the API.
     """
 
-    """users = [u["username"] for u in info["includes"]["users"]]
+    users = [u["username"] for u in info["includes"]["users"]]
     names = [u["name"] for u in info["includes"]["users"]]
     pics = [u["profile_image_url"] for u in info["includes"]["users"]]
     dates = [u["created_at"] for u in info["data"]]
@@ -80,5 +79,4 @@ def reformat(info):
     tweet_info = {}
     for ind, (user, name, pic, date, text, id, src) in enumerate(zip(users, names, pics, dates, texts, tweet_ids, srcs)):
         tweet_info[ind] = {"user": user, "name": name, "pic": pic, "date": date, "text": text, "id": id, "src": src}
-    return tweet_info"""
-    return info
+    return tweet_info
