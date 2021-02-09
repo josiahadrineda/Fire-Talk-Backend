@@ -69,7 +69,7 @@ def reformat(info):
     """Molds the generated tweet info into the desirable format for the API.
     """
 
-    users = [u["username"] for u in info["includes"]["users"]]
+    """users = [u["username"] for u in info["includes"]["users"]]
     names = [u["name"] for u in info["includes"]["users"]]
     pics = [u["profile_image_url"] for u in info["includes"]["users"]]
     dates = [u["created_at"] for u in info["data"]]
@@ -80,4 +80,5 @@ def reformat(info):
     tweet_info = {}
     for ind, (user, name, pic, date, text, id, src) in enumerate(zip(users, names, pics, dates, texts, tweet_ids, srcs)):
         tweet_info[ind] = {"user": user, "name": name, "pic": pic, "date": date, "text": text, "id": id, "src": src}
-    return tweet_info
+    return tweet_info"""
+    return info
