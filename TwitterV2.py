@@ -70,13 +70,13 @@ def reformat(info):
 
     users = [u["username"] for u in info["includes"]["users"]]
     names = [u["name"] for u in info["includes"]["users"]]
-    pics = [u["profile_image_url"] for u in info["includes"]["users"]]
+    # pics = [u["profile_image_url"] for u in info["includes"]["users"]]
     dates = [u["created_at"] for u in info["data"]]
     texts = [t["text"] for t in info["data"]]
     tweet_ids = [t["id"] for t in info["data"]]
     srcs = [f"twitter.com/{user}/status/{t_id}" for user, t_id in zip(users, tweet_ids)]
 
     tweet_info = {}
-    for ind, (user, name, pic, date, text, id, src) in enumerate(zip(users, names, pics, dates, texts, tweet_ids, srcs)):
-        tweet_info[ind] = {"user": user, "name": name, "pic": pic, "date": date, "text": text, "id": id, "src": src}
+    for ind, (user, name, date, text, id, src) in enumerate(zip(users, names, dates, texts, tweet_ids, srcs)):
+        tweet_info[ind] = {"user": user, "name": name, "date": date, "text": text, "id": id, "src": src}
     return tweet_info
