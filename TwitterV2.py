@@ -42,10 +42,11 @@ def create_url(city, n):
     tweet = "tweet.fields=author_id,id,created_at"
     user = "user.fields=username,name,profile_image_url"
     max_results = f"max_results={n}"
-    url = "https://api.twitter.com/2/tweets/search/recent?query={}&{}&{}?{}?{}".format(
+    """url = "https://api.twitter.com/2/tweets/search/recent?query={}&{}&{}&{}&{}".format(
         query, max_results, expansions, tweet, user
-    )
-    return url
+    )"""
+    return "https://api.twitter.com/2/users/by?usernames=TwitterDev,TwitterAPI&user.fields=description,created_at"
+    # return url
 
 def create_headers(bearer_token):
     """Generates header for a Twitter Developer Bearer Token.
