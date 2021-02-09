@@ -38,7 +38,7 @@ def create_url(city, n):
     exclude = ['mixtape', 'track', 'song', 'beat', 'remix', 'drip'] + banned_word_list
     query = ' OR '.join(include) + ' -' + ' -'.join(exclude) + ' ' + filt
 
-    max_results = f"max_results={n}"twurl /1.1/statuses/user_timeline.json?count=1 | jq
+    max_results = f"max_results={n}"
     tweet = "tweet.fields=author_id,id,created_at"
     expansions = "expansions=author_id"
     user = "user.fields=username,name,profile_image_url"
