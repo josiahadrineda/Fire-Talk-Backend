@@ -6,6 +6,21 @@ import os
 bt = os.environ['BEARER_TOKEN']
 banned_word_list = list(pd.read_csv('Terms-to-Block.csv').iloc[:, 0])
 
+MONTHS = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec'
+]
+
 def scrape_tweets(city, n):
     """Aggregation of below helpers.
     """
@@ -71,7 +86,7 @@ def reformat(info):
     users = [u["username"] for u in info["includes"]["users"]]
     names = [u["name"] for u in info["includes"]["users"]]
     pics = [u["profile_image_url"] for u in info["includes"]["users"]]
-    dates = [u["created_at"] for u in info["data"]]
+    dates = [reformat_date(u["created_at"]) for u in info["data"]]
     texts = [t["text"] for t in info["data"]]
     tweet_ids = [t["id"] for t in info["data"]]
     srcs = [f"twitter.com/{user}/status/{t_id}" for user, t_id in zip(users, tweet_ids)]
@@ -80,3 +95,17 @@ def reformat(info):
     for ind, (user, name, pic, date, text, id, src) in enumerate(zip(users, names, pics, dates, texts, tweet_ids, srcs)):
         tweet_info[ind] = {"user": user, "name": name, "pic": pic, "date": date, "text": text, "id": id, "src": src}
     return tweet_info
+
+def reformat_date(date):
+    """Reformats a DATE given by the Twitter API v2.
+    """
+
+    year, month, day = date[:4], date[5:7], date[8:10]
+    
+    if month[0] == '0':
+        month = month[1:]
+    if day[0] == '0':
+        day = day[1:]
+    month = MONTHS[int(month) - 1]
+    
+    return ' '.join([day, month, year])
