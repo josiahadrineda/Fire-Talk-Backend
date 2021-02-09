@@ -39,10 +39,10 @@ def create_url(city, n):
     query = ' OR '.join(include) + ' -' + ' -'.join(exclude) + ' ' + filt
 
     expansions = "expansions=author_id"
-    tweet = "tweet.fields=author_id,id"
+    tweet = "tweet.fields=author_id,id,created_at"
     user = "user.fields=username,name,profile_image_url"
     max_results = f"max_results={n}"
-    url = "https://api.twitter.com/2/tweets/search/recent?query={}&{}&{}&{}".format(
+    url = "https://api.twitter.com/2/tweets/search/recent?query={}&{}&{}?{}?{}".format(
         query, max_results, expansions, tweet, user
     )
     return url
